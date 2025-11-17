@@ -1,9 +1,9 @@
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
-import stylistic from "@stylistic/eslint-plugin";
-import prettyImport from
-"@kamiya4047/eslint-plugin-pretty-import";
+import { defineConfig, globalIgnores } from 'eslint/config';
+
+import nextTs from 'eslint-config-next/typescript';
+import nextVitals from 'eslint-config-next/core-web-vitals';
+import prettyImport from '@kamiya4047/eslint-plugin-pretty-import';
+import stylistic from '@stylistic/eslint-plugin';
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -11,16 +11,16 @@ const eslintConfig = defineConfig([
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
+    '.next/**',
+    'out/**',
+    'build/**',
+    'next-env.d.ts',
   ]),
   stylistic.configs.customize({
     arrowParens: true,
     semi: true,
-    }),
-    prettyImport.configs.warn,
+  }),
+  prettyImport.configs.warn,
 ]);
 
 export default eslintConfig;
