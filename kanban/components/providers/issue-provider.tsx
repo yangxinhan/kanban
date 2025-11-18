@@ -1,24 +1,31 @@
 'use client';
 import React, { createContext, useContext } from 'react';
-
+import { useCallback } from 'react';
 import { Issue } from '@/types/issue';
 
 interface IssueContextType {
   issues: Issue[];
+  setIssues: (issues: Issue[]) => void;
+  refresh: () => Promise<void>;
 }
 const IssueContext = createContext<IssueContextType | undefined>(undefined);
-export function IssueProvider({ children }: { children: React.ReactNode }) {
-  const issues = [
-    {
-      id: '1',
-      title: '任務一',
-      description: '敘述一',
-      status: 'todo',
-    },
-  ];
 
+interface IssueProviderProps {
+  initialIssues: Issue[];
+  children: React.ReactNode;
+}
+export function IssueProvider({ initialIssues, children }: IssueProviderProps) {
+  const [issues, setIssues] = React.useState<Issue[]>(initialIssues);
+  const refresh = useCallback(async () => {
+    const response = await fetch('/api/issues');
+    if (!response.ok) {
+      throw new Error(`載入議題失敗 (HTTP ${response.status})`);
+    }
+    const data = await response.json();
+    setIssues(data);
+  }, []);
   return (
-    <IssueContext.Provider value={{ issues }}>
+    <IssueContext.Provider value={{ issues, setIssues, refresh }}>
       {children}
     </IssueContext.Provider>
   );
